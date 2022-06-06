@@ -20,10 +20,6 @@
     #     region: "{{ region }}"
     #   register: result
 
-    # - name: Instances ID
-    #   debug:
-    #     msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
-    #   loop: "{{ result.instances }}"
 
 
     - name: Create an ec2 instance
@@ -42,3 +38,8 @@
         instance_tags:
           Name: Demo
       register: ec2
+
+    - name: Instances ID
+      debug:
+        msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
+      loop: "{{ ec2.instances }}"
