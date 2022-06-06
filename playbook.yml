@@ -32,7 +32,7 @@
 
 
     - name: Provisioning EC2 instances
-      # block:
+      block:
 
       # - name: Upload public key to AWS
       #   ec2_key:
