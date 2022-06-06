@@ -1,0 +1,30 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  vars:
+    keypair: my-key325
+    region: us-east-1
+    instance_type: t2.micro
+    ami: ami-09d56f8956ab235b3 # https://cloud-images.ubuntu.com/locator/ec2/
+    id: "web-app"
+
+  tasks:
+
+    - name: Create an ec2 instance
+      ec2:
+         key_name: "{{ keypair }}"
+         group: MySecurityGroup325  # security group name
+         instance_type: "{{ instance_type }}"
+         image: "{{ ami }}"
+         wait: true
+         region: "{{ region }}"
+         count: 1  # default
+         count_tag:
+            Name: Demo
+         instance_tags:
+            Name: Demo
+         assign_public_ip: yes
+      register: ec2
