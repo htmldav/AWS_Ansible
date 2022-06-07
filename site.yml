@@ -35,8 +35,8 @@
 
     - name: Add the newly created EC2 instance(s) to host group
       ansible.builtin.lineinfile:
-                  dest: {{ hostpath }}
-                  regexp: {{ item.public_ip }} 
+                  dest: "{{ hostpath }}"
+                  regexp: "{{ item.public_ip }}"
                   insertafter: '^[deploy]' 
                   line: "{{ item.public_ip }} {{hoststring}}"
                   state: present
