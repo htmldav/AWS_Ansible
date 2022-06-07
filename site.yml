@@ -44,34 +44,34 @@
     - wait_for: path={{ hostpath }} search_regex={{hoststring}}
 
     
-- hosts: deploy
-  become: yes
+# - hosts: deploy
+#   become: yes
 
-  tasks:
+#   tasks:
   
-  - name: Ensure java is present
-    apt:
-      name: default-jdk
-      state: present
+#   - name: Ensure java is present
+#     apt:
+#       name: default-jdk
+#       state: present
   
-  - name: Ensure maven is present
-    apt:
-      name: maven
-      state: present
+#   - name: Ensure maven is present
+#     apt:
+#       name: maven
+#       state: present
 
-  - name: Ensure git is present
-    apt:
-      name: git
-      state: present
+#   - name: Ensure git is present
+#     apt:
+#       name: git
+#       state: present
 
-  - name: Clone a github repository
-    git:
-      repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
-      dest: /home/ubuntu/repos/
-      clone: yes
-      update: yes
+#   - name: Clone a github repository
+#     git:
+#       repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
+#       dest: /home/ubuntu/repos/
+#       clone: yes
+#       update: yes
 
-  - name: "source code : local install"
-    command: mvn --batch-mode --quiet install
-    args:
-      chdir: "/home/ubuntu/repos"
+#   - name: "source code : local install"
+#     command: mvn --batch-mode --quiet install
+#     args:
+#       chdir: "/home/ubuntu/repos"
