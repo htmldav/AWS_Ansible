@@ -1,4 +1,6 @@
 [local]
 localhost
 
-[webserver]
+[deploy]
+
+[stage]
