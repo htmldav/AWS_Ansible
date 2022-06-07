@@ -49,8 +49,6 @@
 
   tasks:
   
-    - name: maven && java && git && Clone && mvn package && fetch war file
-
     - name: Ensure java is present
       apt:
       name: default-jdk
