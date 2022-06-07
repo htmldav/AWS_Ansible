@@ -43,7 +43,37 @@
 
     - wait_for: path={{ hostpath }} search_regex={{hoststring}}
 
-    # - name: Instances ID
-    #   debug:
-    #     msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
-    #   loop: "{{ ec2.instances }}"
+    
+- hosts: deploy
+  become: yes
+
+  tasks:
+  
+  - name: maven && java && git && Clone && mvn package && fetch war file
+
+  - name: Ensure java is present
+    apt:
+     name: default-jdk
+     state: present
+  
+  - name: Ensure maven is present
+    apt:
+     name: maven
+     state: present
+
+  - name: Ensure git is present
+    apt:
+     name: git
+     state: present
+
+  - name: Clone a github repository
+    git:
+      repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
+      dest: /home/ubuntu/repos/
+      clone: yes
+      update: yes
+
+  - name: "source code : local install"
+    command: mvn --batch-mode --quiet install
+    args:
+      chdir: "/home/ubuntu/repos"
