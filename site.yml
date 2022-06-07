@@ -10,17 +10,11 @@
     instance_type: t2.micro
     ami: ami-09d56f8956ab235b3 # https://cloud-images.ubuntu.com/locator/ec2/
     id: "web-app"
+    app_code_user: "ubuntu" # remote user
+    hoststring: "ansible_ssh_user=ubuntu ansible_ssh_private_key_file=../.ssh/my-key.pem"
+    hostpath: "hosts"
 
   tasks:
-
-    # - name: Get instances facts
-    #   ec2_instance_facts:
-    #     aws_access_key: "{{ec2_access_key}}"
-    #     aws_secret_key: "{{ec2_secret_key}}"
-    #     region: "{{ region }}"
-    #   register: result
-
-
 
     - name: Create an ec2 instance
       ec2:
@@ -34,12 +28,22 @@
         region: "{{ region }}"
         count: 1  # default
         count_tag:
-          Name: Demo
+          Name: Deploy
         instance_tags:
-          Name: Demo
+          Name: Deploy
       register: ec2
 
-    - name: Instances ID
-      debug:
-        msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
-      loop: "{{ ec2.instances }}"
+    - name: Add the newly created EC2 instance(s) to host group
+      lineinfile: dest={{ hostpath }}
+                  regexp={{ item.public_ip }} 
+                  insertafter="[webserver]" 
+                  line="{{ item.public_ip }} {{hoststring}}"
+                  state=present
+      with_items: "{{ec2.instances}}"
+
+    - wait_for: path={{ hostpath }} search_regex={{hoststring}}
+
+    # - name: Instances ID
+    #   debug:
+    #     msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
+    #   loop: "{{ ec2.instances }}"
