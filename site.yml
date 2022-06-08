@@ -37,7 +37,7 @@
       ansible.builtin.lineinfile:
                   dest: "{{ hostpath }}"
                   # regexp: "{{ item.public_ip }}"
-                  insertafter: '^[deploy]' 
+                  insertafter: '\[deploy\]' 
                   line: "{{hoststring}}"
                   state: present
 
