@@ -45,6 +45,8 @@
 
     - wait_for: path={{ hostpath }} search_regex={{hoststring}}
 
+    - meta: refresh_inventory
+
     
 - hosts: deploy
   become: yes
