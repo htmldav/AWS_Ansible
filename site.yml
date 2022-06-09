@@ -59,6 +59,11 @@
   become: yes
 
   tasks:
+
+  - name: update
+    apt:
+      name: update
+      state: present
   
   - name: Ensure java is present
     apt:
