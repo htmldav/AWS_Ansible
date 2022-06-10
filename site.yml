@@ -100,3 +100,9 @@
     command: mvn --batch-mode --quiet install
     args:
       chdir: "/home/ubuntu/repos"
+
+  - name: Simple PUT operation
+    amazon.aws.aws_s3:
+      bucket: test09062022
+      object: /home/ubuntu/repos/target/hello-1.0.war
+      mode: put
