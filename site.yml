@@ -25,85 +25,85 @@
         mode: create
         region: "{{ region }}"    
 
-#     - name: Create an ec2 instance
-#       ec2:
-#         aws_access_key: "{{ec2_access_key}}"
-#         aws_secret_key: "{{ec2_secret_key}}"
-#         key_name: "{{ keypair }}"
-#         group: MySecurityGroup325  # security group name
-#         instance_type: "{{ instance_type }}"
-#         image: "{{ ami }}"
-#         wait: true
-#         region: "{{ region }}"
-#         count: 1  # default
-#         count_tag:
-#           Name: Deploy
-#         instance_tags:
-#           Name: Deploy
-#       register: ec2
+    - name: Create an ec2 instance
+      ec2:
+        aws_access_key: "{{ec2_access_key}}"
+        aws_secret_key: "{{ec2_secret_key}}"
+        key_name: "{{ keypair }}"
+        group: MySecurityGroup325  # security group name
+        instance_type: "{{ instance_type }}"
+        image: "{{ ami }}"
+        wait: true
+        region: "{{ region }}"
+        count: 1  # default
+        count_tag:
+          Name: Deploy
+        instance_tags:
+          Name: Deploy
+      register: ec2
 
 
-#     - name: Add the newly created EC2 instance(s) to host group
-#       ansible.builtin.lineinfile:
-#                   dest: "{{ hostpath }}"
-#                   regexp: "{{ item.public_ip }}"
-#                   insertafter: '\[deploy\]' 
-#                   line: "{{ item.public_ip }} {{hoststring}}"
-#                   state: present
-#       with_items: "{{ec2.instances}}"
+    - name: Add the newly created EC2 instance(s) to host group
+      ansible.builtin.lineinfile:
+                  dest: "{{ hostpath }}"
+                  regexp: "{{ item.public_ip }}"
+                  insertafter: '\[deploy\]' 
+                  line: "{{ item.public_ip }} {{hoststring}}"
+                  state: present
+      with_items: "{{ec2.instances}}"
 
-#     - wait_for: path={{ hostpath }} search_regex={{hoststring}}
+    - wait_for: path={{ hostpath }} search_regex={{hoststring}}
     
-#     - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
-#       wait_for:
-#         port: 22
-#         host: "{{ item.public_ip }}"
-#         delay: 10
-#       with_items: "{{ec2.instances}}"
+    - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+      wait_for:
+        port: 22
+        host: "{{ item.public_ip }}"
+        delay: 10
+      with_items: "{{ec2.instances}}"
 
-#     - meta: refresh_inventory
+    - meta: refresh_inventory
 
   
-# - hosts: deploy
-#   become: yes
+- hosts: deploy
+  become: yes
 
-#   tasks:
+  tasks:
 
-#   - name: Update and upgrade apt packages
-#     apt:
-#       upgrade: yes
-#       update_cache: yes
-#       cache_valid_time: 86400
+  - name: Update and upgrade apt packages
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400
  
-#   - name: Ensure java is present
-#     apt:
-#       name: default-jdk
-#       state: present
+  - name: Ensure java is present
+    apt:
+      name: default-jdk
+      state: present
   
-#   - name: Ensure maven is present
-#     apt:
-#       name: maven
-#       state: present
+  - name: Ensure maven is present
+    apt:
+      name: maven
+      state: present
 
-#   - name: Ensure git is present
-#     apt:
-#       name: git
-#       state: present
+  - name: Ensure git is present
+    apt:
+      name: git
+      state: present
 
-#   - name: Clone a github repository
-#     git:
-#       repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
-#       dest: /home/ubuntu/repos/
-#       clone: yes
-#       update: yes
+  - name: Clone a github repository
+    git:
+      repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
+      dest: /home/ubuntu/repos/
+      clone: yes
+      update: yes
 
-#   - name: "source code : local install"
-#     command: mvn --batch-mode --quiet install
-#     args:
-#       chdir: "/home/ubuntu/repos"
+  - name: "source code : local install"
+    command: mvn --batch-mode --quiet install
+    args:
+      chdir: "/home/ubuntu/repos"
 
-#   - name: Simple PUT operation
-#     amazon.aws.aws_s3:
-#       bucket: test09062022
-#       object: /home/ubuntu/repos/target/hello-1.0.war
-#       mode: put
+  - name: Simple PUT operation
+    amazon.aws.aws_s3:
+      bucket: test10062022
+      object: /home/ubuntu/repos/target/hello-1.0.war
+      mode: put
