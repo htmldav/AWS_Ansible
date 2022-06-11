@@ -120,16 +120,18 @@
     args:
       chdir: "/home/ubuntu/repos"
 
-  - name: Get AWS KEY ID
-    set_fact: 
-      aws_key_id: "{{ec2_access_key}}"
+  # - name: Get AWS KEY ID
+  #   set_fact: 
+  #     aws_key_id: "{{ec2_access_key}}"
 
-  - name: Get AWS SECRET KEY
-    set_fact: 
-      aws_secret_key: "{{ec2_secret_key}}"
+  # - name: Get AWS SECRET KEY
+  #   set_fact: 
+  #     aws_secret_key: "{{ec2_secret_key}}"
 
   - name: Simple PUT operation
     amazon.aws.aws_s3:
+      aws_access_key: "{{ec2_access_key}}"
+      aws_secret_key: "{{ec2_secret_key}}"
       bucket: test10062022
       object: /home/ubuntu/repos/target/hello-1.0.war
       mode: put
