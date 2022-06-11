@@ -90,9 +90,9 @@
       name: git
       state: present
 
-  - name: Ensure boto3 is present
+  - name: Ensure awscli is present
     apt:
-      name: boto3
+      name: awscli
       state: present
 
   - name: Clone a github repository
