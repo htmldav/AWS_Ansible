@@ -65,16 +65,16 @@
     - meta: refresh_inventory
 
   
-- hosts: deploy
+- hosts: deploy, stage
   become: yes
 
   tasks:
 
-  - name: Update and upgrade apt packages
-    apt:
-      upgrade: yes
-      update_cache: yes
-      cache_valid_time: 86400
+  # - name: Update and upgrade apt packages
+  #   apt:
+  #     upgrade: yes
+  #     update_cache: yes
+  #     cache_valid_time: 86400
  
   - name: Ensure java is present
     apt:
