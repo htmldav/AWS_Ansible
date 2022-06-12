@@ -54,6 +54,35 @@
       with_items: "{{ec2.instances}}"
 
     - wait_for: path={{ hostpath }} search_regex={{hoststring}}
+
+    # -------------------------------------------------
+    - name: Create an ec2 Stage instance
+      ec2:
+        aws_access_key: "{{ec2_access_key}}"
+        aws_secret_key: "{{ec2_secret_key}}"
+        key_name: "{{ keypair }}"
+        group: MySecurityGroup325  # security group name
+        instance_type: "{{ instance_type }}"
+        image: "{{ ami }}"
+        wait: true
+        region: "{{ region }}"
+        count: 1  # default
+        count_tag:
+          Name: Stage
+        instance_tags:
+          Name: Stage
+      register: ec2_stage
+
+
+    - name: Add the newly created EC2 instance(s) Stage to host group
+      ansible.builtin.lineinfile:
+                  dest: "{{ hostpath }}"
+                  regexp: "{{ item.public_ip }}"
+                  insertafter: '\[stage\]' 
+                  line: "{{ item.public_ip }} {{hoststring}}"
+                  state: present
+      with_items: "{{ec2_stage.instances}}"
+    # ---------------------------------------------------
     
     - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
       wait_for:
