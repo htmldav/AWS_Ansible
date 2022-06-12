@@ -175,14 +175,11 @@
      name: tomcat9
      state: present
 
-  # - name: Simple GET operation
-  #   amazon.aws.aws_s3:
-  #     aws_access_key: "{{ec2_access_key}}"
-  #     aws_secret_key: "{{ec2_secret_key}}"
-  #     bucket: test12062022
-  #     object: hello-1.0.war
-  #     src: /home/ubuntu/repos/target/hello-1.0.war
-  #     mode: get
-
-  #     dest: /var/lib/tomcat9/webapps
-
+  - name: Simple GET operation
+    amazon.aws.aws_s3:
+      aws_access_key: "{{ec2_access_key}}"
+      aws_secret_key: "{{ec2_secret_key}}"
+      bucket: test12062022
+      object: hello-1.0.war
+      dest: /var/lib/tomcat9/webapps/hello-1.0.war
+      mode: get
