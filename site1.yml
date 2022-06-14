@@ -1,0 +1,94 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  vars:
+    keypair: my-key325
+    region: us-east-1
+    instance_type: t2.micro
+    ami: ami-09d56f8956ab235b3 # https://cloud-images.ubuntu.com/locator/ec2/
+    id: "web-app"
+    app_code_user: "ubuntu" # remote user
+    hoststring: "ansible_ssh_user=ubuntu ansible_ssh_private_key_file=../.ssh/my-key.pem"
+    hostpath: "hosts"
+
+  tasks:
+
+    - name: Create an ec2 instance
+      ec2:
+        aws_access_key: "{{ec2_access_key}}"
+        aws_secret_key: "{{ec2_secret_key}}"
+        key_name: "{{ keypair }}"
+        group: MySecurityGroup325  # security group name
+        instance_type: "{{ instance_type }}"
+        image: "{{ ami }}"
+        wait: true
+        region: "{{ region }}"
+        count: 1  # default
+        count_tag:
+          Name: Deploy
+        instance_tags:
+          Name: Deploy
+      register: ec2
+
+
+    - name: Add the newly created EC2 instance(s) to host group
+      ansible.builtin.lineinfile:
+                  dest: "{{ hostpath }}"
+                  regexp: "{{ item.public_ip }}"
+                  insertafter: '\[deploy\]' 
+                  line: "{{ item.public_ip }} {{hoststring}}"
+                  state: present
+      with_items: "{{ec2.instances}}"
+
+    - wait_for: path={{ hostpath }} search_regex={{hoststring}}
+
+  
+    - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+      wait_for:
+        port: 22
+        host: "{{ item.public_ip }}"
+        delay: 10
+      with_items: "{{ec2.instances}}"
+
+    - meta: refresh_inventory
+
+
+- hosts: deploy
+  become: yes
+
+  tasks:
+
+  - name: Update and upgrade apt packages
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400
+ 
+  - name: Ensure mc is present
+    apt:
+      name: mc
+      state: present
+  
+  - name: Ensure docker is present
+    apt:
+      name: docker.io
+      state: present
+
+  - name: Ensure git is present
+    apt:
+      name: git
+      state: present
+
+  - name: Clone a github repository
+    git:
+      repo: https://github.com/htmldav/t2.git
+      dest: /home/ubuntu/
+      clone: yes
+      update: yes
+
+  - name: "terraform"
+    command: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && apt-get install terraform
+
