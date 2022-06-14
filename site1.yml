@@ -89,6 +89,6 @@
       clone: yes
       update: yes
 
-  - name: "terraform"
-    command: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && apt-get install terraform
+  # - name: "terraform"
+  #   command: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && apt-get install terraform
 
