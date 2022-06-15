@@ -90,5 +90,5 @@
       name: awscli
       state: present
 
-  - name: Run a script with arguments (free form)
-    ansible.builtin.script: script.sh
+  # - name: Run a script with arguments (free form)
+  #   ansible.builtin.script: script.sh
