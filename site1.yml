@@ -72,11 +72,6 @@
       name: mc
       state: present
   
-  - name: Ensure docker is present
-    apt:
-      name: docker.io
-      state: present
-
   - name: Ensure git is present
     apt:
       name: git
@@ -89,6 +84,11 @@
       clone: yes
       update: yes
 
-  # - name: "terraform"
-  #   command: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && apt-get install terraform
+     
+  - name: Ensure awscli is present
+    apt:
+      name: awscli
+      state: present
 
+  - name: Run a script with arguments (free form)
+    ansible.builtin.script: script.sh
