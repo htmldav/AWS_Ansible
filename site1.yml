@@ -79,8 +79,8 @@
 
   - name: Clone a github repository
     git:
-      repo: https://github.com/htmldav/t2.git
-      dest: /home/ubuntu/t2/
+      repo: https://github.com/htmldav/dz14.git
+      dest: /home/ubuntu/dz14/
       clone: yes
       update: yes
 
