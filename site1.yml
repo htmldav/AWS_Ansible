@@ -71,3 +71,8 @@
     apt:
       name: mc
       state: present  
+
+  - name: Ensure awscli is present
+    apt:
+      name: awscli
+      state: present 
