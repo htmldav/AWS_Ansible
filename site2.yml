@@ -70,4 +70,34 @@
   - name: Ensure mc is present
     apt:
       name: mc
-      state: present  
+      state: present
+  
+  - name: Ensure git is present
+    apt:
+      name: git
+      state: present
+
+  - name: Clone a github repository
+    git:
+      repo: https://github.com/htmldav/dz14.git
+      dest: /home/ubuntu/dz14/
+      clone: yes
+      update: yes
+
+  - name: Ensure pip3 is present
+    apt:
+      name: python3-pip
+      state: present
+
+  - name: Install boto3 and botocore with pip3 module
+    pip:
+      name: 
+      - boto3
+      - botocore
+      state: present
+
+   
+  - name: Ensure awscli is present
+    apt:
+      name: awscli
+      state: present    
