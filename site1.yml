@@ -26,7 +26,7 @@
         image: "{{ ami }}"
         wait: true
         region: "{{ region }}"
-        count: 1  # default
+        count: 2 # default
         count_tag:
           Name: Deploy
         instance_tags:
