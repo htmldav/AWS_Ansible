@@ -8,7 +8,7 @@
     keypair: my-key325
     region: us-east-1
     instance_type: t2.micro
-    ami: ami-0ca951dd3a6f8cbfc
+    ami: ami-08d4ac5b634553e16
     # ami: ami-09d56f8956ab235b3  https://cloud-images.ubuntu.com/locator/ec2/
     id: "web-app"
     app_code_user: "ubuntu" # remote user
